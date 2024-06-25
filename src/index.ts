@@ -172,7 +172,7 @@ async function addGenre() {
     catch (error){
     console.error('Error adding movie:', error)
     throw error
-    
+
 
     // Expected:
     // 1. Prompt the user for genre name.
@@ -194,6 +194,7 @@ async function addGenreToMovie() {
         
     }
     console.log(nygerenelist)
+    
 
     // Expected:
     // 1. Prompt the user for multiple genres to add (comma separated).
