@@ -143,7 +143,7 @@ async function listMoviesByGenre() {
     result.forEach(genre =>{
         console.log(genre.name)
     });
-    
+
 
 
 
@@ -172,6 +172,7 @@ async function addGenre() {
     catch (error){
     console.error('Error adding movie:', error)
     throw error
+    
 
     // Expected:
     // 1. Prompt the user for genre name.
