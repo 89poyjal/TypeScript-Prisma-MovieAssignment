@@ -123,7 +123,7 @@ async function listMoviesByYear() {
 
     });
     
-    
+
    
     // Expected:
     // 1. Prompt the user for the year to list movies.
@@ -143,6 +143,7 @@ async function listMoviesByGenre() {
     result.forEach(genre =>{
         console.log(genre.name)
     });
+    
 
 
 
