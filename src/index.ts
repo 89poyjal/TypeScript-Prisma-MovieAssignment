@@ -1,47 +1,97 @@
-import readlineSync from 'readline-sync';
-import { PrismaClient, Movie, Genre } from '@prisma/client';
 
+
+import readlineSync from 'readline-sync';
+import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
-async function addMovie() {
-    const title: string = readlineSync.question('Enter movie title: ');
-    const year: number = readlineSync.questionInt('Enter movie year: ');
 
-    const movie: Movie = await prisma.movie.create({
+ 
+async function addMovie() {
+try {
+    const title: string = readlineSync.question("enter title: ");
+    const year: number = readlineSync.questionInt("enter year: ");
+
+    const newMovie = await prisma.movie.create({
+        
         data: {
             title,
             year,
         },
-    });
-    console.log(movie);
+    })
+    console.log(newMovie);
+    
+} catch (error){
+    console.error('Error adding movie:', error)
+    throw error
 }
 
-async function updateMovie() {
-    // Expected:
-    // 1. Prompt the user for movie ID to update.
-    // 2. Prompt the user for new movie title, year, and genre ID.
-    // 3. Use Prisma client to update the movie with the provided ID with the new details.
-    //    Reference: https://www.prisma.io/docs/reference/api-reference/prisma-client-reference#update
-    // 4. Print the updated movie details.
 }
+
+  // UpdateMovie
+
+async function updateMovie(){
+    try {
+        const movieId: string = readlineSync.question("enter Id: ");
+    
+        const title: string = readlineSync.question("enter title: ");
+        const year: number = readlineSync.questionInt("enter year: ");
+        const genreId: string = readlineSync.question("enter genre: ");
+        const updatedMovie = await prisma.movie.update({
+            where: { id: movieId },
+            data: {
+                title,
+                year,
+                genreId
+            }
+        })
+        return updatedMovie
+    } catch (error) {
+        console.error('Error updating movie:', error)
+        throw error 
+
+    } 
+}
+
 
 async function deleteMovie() {
-    // Expected:
-    // 1. Prompt the user for movie ID to delete.
-    // 2. Use Prisma client to delete the movie with the provided ID.
-    //    Reference: https://www.prisma.io/docs/reference/api-reference/prisma-client-reference#delete
-    // 3. Print a message confirming the movie deletion.
+    const titleId: string = readlineSync.question("enter title");
+   const result = await prisma.movie.delete({
+    where: {id: titleId}
+   })
+   console.log(result);
+   
 }
 
 async function listMovies() {
-    // Expected:
-    // 1. Use Prisma client to fetch all movies.
-    //    Reference: https://www.prisma.io/docs/reference/api-reference/prisma-client-reference#findmany
-    // 2. Include the genre details in the fetched movies.
-    // 3. Print the list of movies with their genres.
+    const result = await prisma.movie.findMany({
+    include: {
+            genre: true
+        }
+    });
+    result.forEach(movie => {
+        movie.genre.forEach(genre => {
+            console.log(genre.name)
+        });
+    });
 }
 
+
 async function listMovieById() {
+    const listMovieById: string = readlineSync.question("enter Id");
+    const result = await prisma.movie.findMany({
+        include: {
+            genre: true
+        }
+    });
+    result.forEach(genre => {
+        console.log(genre.id)
+        
+    });
+
+    
+    
+
+   
     // Expected:
     // 1. Prompt the user for movie ID to list.
     // 2. Use Prisma client to fetch the movie with the provided ID.
@@ -51,6 +101,25 @@ async function listMovieById() {
 }
 
 async function listMoviesByYear() {
+    const year: number = readlineSync.questionInt("enter year: ");
+    const result = await prisma.movie.findMany({
+        where: {
+            year: year,
+        },
+        include: {
+            genre: true
+        }
+    });
+    result.forEach(movie => {
+        console.log(movie.title)
+        movie.genre.forEach(genre => {
+            console.log(genre.name)
+        });
+        
+
+    });
+    
+   
     // Expected:
     // 1. Prompt the user for the year to list movies.
     // 2. Use Prisma client to fetch movies from the provided year.
@@ -60,6 +129,18 @@ async function listMoviesByYear() {
 }
 
 async function listMoviesByGenre() {
+    const genreId: string = readlineSync.question("enter genre: ");
+    const result = await prisma.genre.findMany({
+        include: {
+            Movie: true
+        }
+    });
+    result.forEach(genre =>{
+        console.log(genre.name)
+    });
+
+
+
     // Expected:
     // 1. Prompt the user for genre Name to list movies.
     // 2. Use Prisma client to fetch movies with the provided genre ID.
@@ -69,14 +150,44 @@ async function listMoviesByGenre() {
 }
 
 async function addGenre() {
+    try {
+        const name: string = readlineSync.question("enter name: ");
+    
+        const newGenre = await prisma.genre.create({
+            
+            data: {
+
+                name
+            },
+        })
+        console.log(newGenre);
+   
+    }
+    catch (error){
+    console.error('Error adding movie:', error)
+    throw error
+
     // Expected:
     // 1. Prompt the user for genre name.
     // 2. Use Prisma client to create a new genre with the provided name.
     //    Reference: https://www.prisma.io/docs/reference/api-reference/prisma-client-reference#create
     // 3. Print the created genre details.
 }
-
+}
 async function addGenreToMovie() {
+    const genres: string = readlineSync.question("entre multiple genres to add (comma separated)");
+    const nygerenelist=genres.split(',');
+    for (let i = 0; i < nygerenelist.length; i++) {
+        await prisma.genre.create({
+            data:{
+                name: nygerenelist[i]
+            }
+        
+        })
+        
+    }
+    console.log(nygerenelist)
+
     // Expected:
     // 1. Prompt the user for multiple genres to add (comma separated).
     // 2. Split the input into an array of genre names.
