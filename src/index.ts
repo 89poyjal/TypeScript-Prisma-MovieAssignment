@@ -90,7 +90,7 @@ async function listMovieById() {
         console.log(genre.id)
         
     });
-    
+
 
     
     
@@ -122,6 +122,7 @@ async function listMoviesByYear() {
         
 
     });
+    
     
    
     // Expected:
