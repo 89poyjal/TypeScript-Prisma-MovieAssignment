@@ -78,6 +78,7 @@ async function listMovies() {
 }
 
 
+
 async function listMovieById() {
     const listMovieById: string = readlineSync.question("enter Id");
     const result = await prisma.movie.findMany({
