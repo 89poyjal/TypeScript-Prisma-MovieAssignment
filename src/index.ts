@@ -53,6 +53,7 @@ async function updateMovie(){
 }
 
 
+
 async function deleteMovie() {
     const titleId: string = readlineSync.question("enter title");
    const result = await prisma.movie.delete({
