@@ -63,6 +63,7 @@ async function deleteMovie() {
    
 }
 
+
 async function listMovies() {
     const result = await prisma.movie.findMany({
     include: {
