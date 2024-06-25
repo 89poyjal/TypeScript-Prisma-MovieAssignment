@@ -90,6 +90,7 @@ async function listMovieById() {
         console.log(genre.id)
         
     });
+    
 
     
     
